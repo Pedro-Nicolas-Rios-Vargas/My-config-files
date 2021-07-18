@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='D:/Program Files/Neovim/share/nvim/runtime/autoload/dist'
+let g:netrw_dirhist_2='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia/Abarrotes-Valdivia/src'
+let g:netrw_dirhist_1='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia/Abarrotes-Valdivia'
+let g:netrw_dirhist_0='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia'
+let g:netrw_dirhist_9='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre'
+let g:netrw_dirhist_8='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia'
+let g:netrw_dirhist_7='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia/Abarrotes-Valdivia'
+let g:netrw_dirhist_6='D:/pnrv2/Documents/Programas/Java/ITCG/6° Semestre/AbarrotesValdivia'
+let g:netrw_dirhist_5='D:/'
+let g:netrw_dirhist_4='C:/Users/pnrv2/AppData/Local/nvim'
