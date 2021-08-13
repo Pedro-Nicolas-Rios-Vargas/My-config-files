@@ -1,44 +1,6 @@
--- nvim-compe setup
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  debug = false;
-  min_length = 1;
-  preselect = 'enable';
-  throttle_time = 80;
-  source_timeout = 200;
-  resolve_timeout = 800;
-  incomplete_delay = 400;
-  max_abbr_width = 100;
-  max_kind_width = 100;
-  max_menu_width = 100;
-  documentation = true;
+local nvim_lsp = require('lspconfig')
+local conf = require('lsp.lspConf')
 
-  source = {
-    path = true;
-    buffer = true;
-    calc = true;
-    nvim_lsp = true;
-    nvim_lua = true;
-    vsnip = true;
-    ultisnips = true;
-  };
-}
-
--- lsp python
-require'lspconfig'.pyright.setup{}
-
--- lsp java
-require'lspconfig'.jdtls.setup {
-}
-
---[[
-require'snippets'.use_suggested_mappings()
-
-require'snippets'.snippets = {
-    _global = {};
-}
---]]
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -49,20 +11,16 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     }
 }
 
--- html lsp
-require'lspconfig'.html.setup {
-    cmd = { "vscode-html-language-server.cmd", "--stdio" },
-    capabilities = capabilities,
-}
--- css lsp
-require'lspconfig'.cssls.setup {
-    cmd = { "vscode-css-language-server.cmd", "--stdio" },
-    capabilities = capabilities,
-}
--- json lsp
-require'lspconfig'.jsonls.setup {
-    cmd = { "vscode-json-language-server.cmd", "--stdio" },
-    filetypes = { "json" },
-}
+local servers = { "pyright", "jdtls" }
+for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+        on_attach = conf,
+        capabilities = capabilities,
+        flags = {
+            debounce_text_changes = 150,
+        }
+    }
+end
 
-require'lsp.sumnekoConf'
+require('lsp.langservs')
+require('lsp.sumnekoConf')

@@ -720,6 +720,7 @@ mouse:
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
 #key_bindings:
+  #- { key: Backslash, mods: Control|Alt, mode: ~Vi|~Search|~AppCursor|~AppKeypad|~Alt, chars: "\\" }
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }
   #- { key: L,         mods: Control,                    action: ClearLogNotice }

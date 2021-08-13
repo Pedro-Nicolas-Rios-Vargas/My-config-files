@@ -16,6 +16,7 @@ set signcolumn=yes
 set incsearch
 set scrolloff=8
 set noshowmode
+set termguicolors
 
 call plug#begin('~/.nvim/plugged')
 
@@ -32,13 +33,14 @@ Plug 'hrsh7th/nvim-compe'
 " HTML, CSS, JSON
 " vscode-lsp requirements
 Plug 'hrsh7th/vscode-langservers-extracted'
-"Plug 'norcalli/snippets.nvim'
 "}}}
 
 " vscode snippet
+" {{{
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'rafamadriz/friendly-snippets'
+" }}}
 
 " telescope pluggins
 " {{{
@@ -46,20 +48,26 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 
-
 Plug 'ap/vim-css-color'
-
-
 " }}}
 
+" Neovim bar decorator
+" {{{
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'ryanoasis/vim-devicons'
+" }}}
 
 call plug#end()
 
-let g:airline_theme = 'base16_chalk' "  base16_gruvbox_dark_hard, base16_isotope
+
+let g:airline_theme = 'base16_chalk'
+"  My Airline themes
+"
+"  base16_gruvbox_dark_hard, base_16_monokai, base16_pop,
+"  dark_minimal, random, powerlineish, serene, tomorrow, wombat, zenburn
+
 let g:airline_powerline_fonts = 1
 
 if exists('+termguicolors')
@@ -83,6 +91,13 @@ let g:completion_enable_snippet = 'vim-vsnip'
 lua require('lsp')
 
 
+noremap! ñ+ ~
+noremap! ñ{ ^
+noremap! ñ' \
+
+vnoremap J :m '>+1'<CR>gv=gv
+vnoremap K :m '<-2'<CR>gv=gv
+
 " SNIPPETS
 " {{{
 "inoremap <c-k> <cmd>lua return require'snippets'.expand_or_advance(1)<CR>
@@ -91,10 +106,11 @@ lua require('lsp')
 
 " TELESCOPE MAPS
 " {{{
-map <leader>bf <cmd>Telescope buffers<CR>
-map <leader>ff <cmd>Telescope find_files<CR>
-map <leader>gf <cmd>Telescope git_files<CR>
-map <leader>fb <cmd>Telescope file_browser<CR>
+nnoremap <leader>bf <cmd>Telescope buffers<CR>
+nnoremap <leader>ff <cmd>Telescope find_files<CR>
+nnoremap <leader>gf <cmd>Telescope git_files<CR>
+nnoremap <leader>fb <cmd>Telescope file_browser<CR>
+nnoremap <leader>ht <cmd>Telescope help_tags<CR>
 "}}}
 
 " nvim-compe settings
