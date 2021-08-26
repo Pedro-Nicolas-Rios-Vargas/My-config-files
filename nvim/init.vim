@@ -17,11 +17,19 @@ set incsearch
 set scrolloff=8
 set noshowmode
 set termguicolors
+set encoding=UTF-8
 
 call plug#begin('~/.nvim/plugged')
 
+" indent decorator
+
+Plug 'lukas-reineke/indent-blankline.nvim'
+
 " colorscheme
+" {{{
 Plug 'gruvbox-community/gruvbox'
+Plug 'marko-cerovac/material.nvim'
+" }}}
 
 " LSP
 " {{{
@@ -57,6 +65,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
 " }}}
 
 call plug#end()
@@ -70,39 +79,65 @@ let g:airline_theme = 'base16_chalk'
 
 let g:airline_powerline_fonts = 1
 
-if exists('+termguicolors')
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-endif
+" if exists('+termguicolors')
+"     let &t_8f = !""\<Esc>[38;2;%lu;%lu;%lum"
+"     let &t_8b = !""\<Esc>[48;2;%lu;%lu;%lum"
+" endif
 
 colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard' "last value was medium
 set background=dark
+
+let g:material_style = 'deep ocean'
+"colorscheme material
 
 augroup asmprograms
     au BufRead,BufNewFile *.asm set filetype=masm
     au BufRead,BufNewFile *.inc set filetype=masm
 augroup END
 
+augroup htmlformat
+    au BufRead,BufNewFile *.html set tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
+augroup yanking
+    au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=150, on_visual=true }
+augroup END
+
 set completeopt=menuone,noinsert,noselect
+
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 let g:completion_enable_snippet = 'vim-vsnip'
 
 " Add all the lsp servers from lua/lsp/*.lua
 lua require('lsp')
+lua require('indent')
 
+noremap <C-z> <nop>
+noremap + <nop>
 
 noremap! ñ+ ~
 noremap! ñ{ ^
 noremap! ñ' \
+noremap! ñ} `
+
+" Bloques de quotes
+" {{{
+inoremap <A-}> ``<C-c>i
+inoremap <A-"> ""<C-c>i
+inoremap <A-'> ''<C-c>i
+inoremap <A-(> ()<C-c>i
+inoremap <A-{> {}<C-c>i
+inoremap <A-[> []<C-c>i
+inoremap <A-<> <><C-c>i
+inoremap {<CR> {<CR>}<C-c>O
+inoremap [<CR> [<CR>]<C-c>O
+" }}}
 
 vnoremap J :m '>+1'<CR>gv=gv
 vnoremap K :m '<-2'<CR>gv=gv
-
-" SNIPPETS
-" {{{
-"inoremap <c-k> <cmd>lua return require'snippets'.expand_or_advance(1)<CR>
-"inoremap <c-j> <cmd>lua return require'snippets'.advance_snippet(-1)<CR>
-"}}}
+vnoremap > >gv
+vnoremap < <gv
 
 " TELESCOPE MAPS
 " {{{
@@ -110,7 +145,9 @@ nnoremap <leader>bf <cmd>Telescope buffers<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<CR>
 nnoremap <leader>gf <cmd>Telescope git_files<CR>
 nnoremap <leader>fb <cmd>Telescope file_browser<CR>
-nnoremap <leader>ht <cmd>Telescope help_tags<CR>
+nnoremap <leader>fh <cmd>Telescope help_tags<CR>
+nnoremap <leader>fr <cmd>Telescope grep_string<CR>
+nnoremap <leader>fc <cmd>Telescope colorscheme<CR>
 "}}}
 
 " nvim-compe settings
@@ -151,7 +188,7 @@ xmap        S   <Plug>(vsnip-cut-text)
 
 " If you want to use snippet for multiple filetypes, you can `g:vsnip_filetypes` for it.
 let g:vsnip_filetypes = {}
-"let g:vsnip_filetypes.javascriptreact = ['javascript']
+" let g:vsnip_filetypes.javascriptreact = ['javascript']
 let g:vsnip_filetypes.javascript = ['javascript']
 " MAPS
 "}}}
