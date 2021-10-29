@@ -14,15 +14,6 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
---local capabilities = vim.lsp.protocol.make_client_capabilities()
---capabilities.textDocument.completion.completionItem.snippetSupport = true
---capabilities.textDocument.completion.completionItem.resolveSupport = {
---    properties = {
---        'documentation',
---        'detail',
---        'additionalTextEdits',
---    }
---}
 
 local filetype_attach = setmetatable({
     html = function(client)
@@ -58,6 +49,8 @@ local custom_attach = function(client)
     buf_nnoremap { "gD", vim.lsp.buf.declaration }
     buf_nnoremap { "gi", vim.lsp.buf.implementation }
     buf_nnoremap { "<C-k>", vim.lsp.buf.signature_help }
+    buf_nnoremap { "<leader>D", vim.lsp.buf.type_definition }
+    buf_nnoremap { "<leader>rn", vim.lsp.buf.rename }
     buf_nnoremap { "<leader>ca", vim.lsp.buf.code_action }
     buf_nnoremap { "gr", vim.lsp.buf.references }
     buf_nnoremap { "<leader>f", vim.lsp.buf.formatting }
@@ -75,17 +68,19 @@ end
 --{{{
 --Sumneko_lua thinks
 local system_name
+local sumneko_root_path
 if vim.fn.has("mac") == 1 then
     system_name = "macOS"
 elseif vim.fn.has("unix") == 1 then
     system_name = "Linux"
+    sumneko_root_path = "/home/ordep/my_repositories/lua-language-server"
 elseif vim.fn.has("win32") == 1 then
     system_name = "Windows"
+    sumneko_root_path = "D:/pnrv2/Documents/Programas/lua/lua-language-server"
 else
     print("Unsuported system for sumneko")
 end
 
-local sumneko_root_path = "D:/pnrv2/Documents/Programas/lua/lua-language-server"
 local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
 
 local runtime_path = vim.split(package.path, ';')
@@ -109,39 +104,9 @@ local filetypes = {
 local servers = {
     pylsp = true,
     jdtls = true,
-    html = {
-        cmd = { "vscode-html-language-server.cmd", "--stdio" },
-        filetypes = { "html" },
-        init_options = {
-            configurationSection = { "html", "css", "javascript" },
-            embeddedLanguages = {
-                css = true,
-                javascript = true
-            },
-        },
-    },
-    cssls = {
-        cmd = { "vscode-css-language-server.cmd", "--stdio" },
-        filetypes = { "css", "scss", "less" },
-        settings = {
-            css = {
-                validate = true
-            },
-            less = {
-                validate = true
-            },
-            scss = {
-                validate = true
-            }
-        }
-    },
-    jsonls = {
-        cmd = { "vscode-json-language-server.cmd", "--stdio" },
-        filetypes = { "json" },
-        init_options = {
-            provideFormatter = true
-        },
-    },
+    html = false,
+    cssls = true,
+    jsonls = false,
     sumneko_lua = {
         cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
         settings = {
@@ -163,7 +128,7 @@ local servers = {
         },
     },
     tsserver = {
-        cmd = { "typescript-language-server.cmd", "--stdio" },
+        cmd = { "typescript-language-server", "--stdio" },
         filetypes = {
             "javascript",
             "javascriptreact",
@@ -177,52 +142,52 @@ local servers = {
             custom_attach(client)
         end
     },
-    diagnosticls = {
-        filetypes = vim.tbl_keys(filetypes),
-        init_options = {
-            filetypes = filetypes,
-            linters = {
-                eslint = {
-                    sourceName = "eslint",
-                    command = "eslint_d",
-                    rootPatterns = { ".eslintrc.js", "package.json" },
-                    debounce = 100,
-                    args = {
-                        "--stdin",
-                        "--stdin-filename",
-                        "%filepath",
-                        "--format",
-                        "json"
-                    },
-                    parseJson = {
-                        errorsRoot = "[0].messages",
-                        line = "line",
-                        column = "column",
-                        endLine = "endLine",
-                        endColumn = "endColumn",
-                        message = "${ message } [ ${ruleId} ]",
-                        security = "severity"
-                    },
-                    securities = { [2] = "error", [1] = "warning" }
-                }
-            },
-            formatters = {
-                prettier = {
-                    command = "prettier",
-                    args = {
-                        "--stdin-filepath",
-                        "%filepath"
-                    }
-                }
-            },
-            formatFiletypes = {
-                javascript = "prettier",
-                javascriptreact = "prettier",
-                typescript = "prettier",
-                typescriptreact = "prettier"
-            }
-        }
-    }
+    --diagnosticls = {
+    --    filetypes = vim.tbl_keys(filetypes),
+    --    init_options = {
+    --        filetypes = filetypes,
+    --        linters = {
+    --            eslint = {
+    --                sourceName = "eslint",
+    --                command = "eslint_d",
+    --                rootPatterns = { ".eslintrc.js", "package.json" },
+    --                debounce = 100,
+    --                args = {
+    --                    "--stdin",
+    --                    "--stdin-filename",
+    --                    "%filepath",
+    --                    "--format",
+    --                    "json"
+    --                },
+    --                parseJson = {
+    --                    errorsRoot = "[0].messages",
+    --                    line = "line",
+    --                    column = "column",
+    --                    endLine = "endLine",
+    --                    endColumn = "endColumn",
+    --                    message = "${ message } [ ${ruleId} ]",
+    --                    security = "severity"
+    --                },
+    --                securities = { [2] = "error", [1] = "warning" }
+    --            }
+    --        },
+    --        formatters = {
+    --            prettier = {
+    --                command = "prettier",
+    --                args = {
+    --                    "--stdin-filepath",
+    --                    "%filepath"
+    --                }
+    --            }
+    --        },
+    --        formatFiletypes = {
+    --            javascript = "prettier",
+    --            javascriptreact = "prettier",
+    --            typescript = "prettier",
+    --            typescriptreact = "prettier"
+    --        }
+    --    }
+    --}
 
 }
 

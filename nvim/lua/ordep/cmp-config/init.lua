@@ -14,20 +14,32 @@ cmp.setup({
         [ '<CR>' ] = cmp.mapping.confirm({ select = true }),
     },
     sources = {
+        { name = 'nvim_lua' },
         { name = 'nvim_lsp' },
-        { name = 'vsnip' },
         { name = 'buffer' },
+        { name = 'vsnip' },
+        { name = 'path' },
+        { name = 'calc' },
     },
     completion = {
         completeopt = 'menu,menuone,noinsert',
     },
     formatting = {
-        format = require("lspkind").cmp_format({ with_text = true, menu = ({
-            buffer = "[Buffer]",
-            nvim_lsp = "[LSP]",
-            nvim_lua = "[Lua]",
-            vsnip = "[vsnip]",
-        })}),
-    }
+        format = require("lspkind").cmp_format({
+            with_text = true,
+            menu = ({
+                buffer = "[Buffer]",
+                nvim_lsp = "[LSP]",
+                nvim_lua = "[Lua]",
+                vsnip = "[vsnip]",
+                path = "[Path]",
+                calc = "[Calc]",
+            }),
+        }),
+    },
+    experimental = {
+        native_menu = false,
+        ghost_text = true,
+    },
 })
 

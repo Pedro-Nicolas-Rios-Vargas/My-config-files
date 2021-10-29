@@ -1,6 +1,6 @@
 vim.g.mapleader = " "
 
-vim.cmd ('so ~/AppData/Local/nvim/vim_scripts/pluggins_vim-plug.vim')
+vim.cmd ('so ~/.config/nvim/vim_scripts/pluggins_vim-plug.vim')
 
 vim.g.airline_theme = 'base16_chalk'
 
@@ -11,6 +11,7 @@ vim.g.airline_powerline_fonts = 1
 
 vim.g.gruvbox_contrast_dark = 'hard'
 vim.g.material_style = 'deep ocean'
+--vim.cmd[[colorscheme material]]
 vim.cmd [[
 colorscheme gruvbox
 hi Normal guibg=NONE ctermbg=NONE
@@ -27,4 +28,5 @@ require "ordep.telescope"
 require "ordep.cmp-config"
 require "ordep.lsp"
 require "ordep.indent"
-require "ordep.lspsaga"
+--require "ordep.lspsaga"
+require "ordep.treesitter"
